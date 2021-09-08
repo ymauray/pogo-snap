@@ -20,7 +20,7 @@ architectures:
 compression: lzo
 
 slots:
-  spot:
+  pogo:
     interface: dbus
     bus: session
     name: org.mpris.pogo
