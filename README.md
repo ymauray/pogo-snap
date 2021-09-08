@@ -16,8 +16,7 @@ distributions.</p>
 </p>
 -->
 
-<center><img alt="Pogo" src="https://github.com/ymauray/pogo-snap/raw/main/screenshot.png"/></center>
-
+<p align="center"><img alt="Pogo" src="https://github.com/ymauray/pogo-snap/raw/main/screenshot.png"/></p>
 
 <p align="center">Published for <img src="https://raw.githubusercontent.com/anythingcodes/slack-emoji-for-techies/gh-pages/emoji/tux.png" align="top" width="24" /> with 💝 by Snapcrafters</p>
 
