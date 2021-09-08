@@ -24,11 +24,18 @@ distributions.</p>
 
 ## Install
 
-    sudo snap install pogo
+    sudo snap install pogo --edge --devmode
+    sudo snap connect pogo:hardware-observe
+    sudo snap connect pogo:mount-observe
+    sudo snap connect pogo:removable-media
 
 <!-- Uncomment and modify this when your snap is available on the store
 [![Get it from the Snap Store](https://snapcraft.io/static/images/badges/en/snap-store-white.svg)](https://snapcraft.io/my-snap-name)
 -->
+
+## Run
+
+    pogo
 
 ([Don't have snapd installed?](https://snapcraft.io/docs/core/install))
 
@@ -43,14 +50,14 @@ upstream so Pogo can authoritatively publish future releases.
   - [x] Give the newly created repository a sensible name, like `godzilla-snap` if you're snapping the Godzilla software
   - [x] Update the description of the repository
   - [x] Update logos and references to `[Project]` and `[my-snap-name]`
-  - [ ] Create a snap that runs in `devmode`
-  - [ ] Register the snap in the store, **using the preferred upstream name**
-  - [ ] Add a screenshot to this `README.md`
-  - [ ] Publish the `devmode` snap in the Snap store edge channel
-  - [ ] Add install instructions to this `README.md`
-  - [ ] Update snap store metadata, icons and screenshots
-  - [ ] Convert the snap to `strict` confinement, or `classic` confinement if it qualifies
-  - [ ] Publish the confined snap in the Snap store beta channel
+  - [x] Create a snap that runs in `devmode`
+  - [x] Register the snap in the store, **using the preferred upstream name**
+  - [x] Add a screenshot to this `README.md`
+  - [x] Publish the `devmode` snap in the Snap store edge channel
+  - [x] Add install instructions to this `README.md`
+  - [x] Update snap store metadata, icons and screenshots
+  - [x] Convert the snap to `strict` confinement, or `classic` confinement if it qualifies
+  - [x] Publish the confined snap in the Snap store beta channel
   - [ ] Update the install instructions in this `README.md`
   - [ ] Post a call for testing on the [Snapcraft Forum](https://forum.snapcraft.io) - [link]()
   - [ ] Make a post in the [Snapcraft Forum](https://forum.snapcraft.io) asking for a transfer of the snap name from you to snapcrafters - [link]()
