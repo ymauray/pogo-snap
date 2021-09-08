@@ -1,0 +1,79 @@
+diff --git a/pogo/__main__.py b/pogo/__main__.py
+index 4522160..6e3fe6b 100755
+--- a/pogo/__main__.py
++++ b/pogo/__main__.py
+@@ -44,16 +44,16 @@ tools.print_platform_info()
+ optparser = optparse.OptionParser(
+     usage='Usage: %prog [options] [FILE(s) | ' + ' | '.join(consts.commands) + ']')
+ optparser.add_option(
+-    '--multiple-instances',
++    '--no-multiple-instances',
+     action='store_true',
+     default=False,
+-    help='start a new instance even if one is already running')
++    help='do not start a new instance if one is already running')
+ 
+ optOptions, optArgs = optparser.parse_args()
+ 
+ 
+ # Check whether Pogo is already running?
+-if not optOptions.multiple_instances:
++if optOptions.no_multiple_instances:
+     shouldStop = False
+     dbusSession = None
+ 
+diff --git a/pogo/modules/GnomeMediaKeys.py b/pogo/modules/GnomeMediaKeys.py
+index 57ba63d..9a358e3 100644
+--- a/pogo/modules/GnomeMediaKeys.py
++++ b/pogo/modules/GnomeMediaKeys.py
+@@ -17,6 +17,7 @@
+ # along with this program; if not, write to the Free Software
+ # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA
+ 
++from inspect import signature
+ import dbus
+ from time import time
+ 
+@@ -58,16 +59,16 @@ class GnomeMediaKeys(modules.Module):
+         """ The application has started """
+         # Try first with the new interface (Gnome >= 2.2)
+         try:
+-            service = dbus.SessionBus().get_object('org.gnome.SettingsDaemon', '/org/gnome/SettingsDaemon/MediaKeys')
++            service = dbus.SessionBus().get_object('org.gnome.SettingsDaemon', '/org/gnome/SettingsDaemon/MediaKeys', introspect=False)
+             self.dbusInterface = dbus.Interface(service, 'org.gnome.SettingsDaemon.MediaKeys')
+-            self.dbusInterface.GrabMediaPlayerKeys(APP_UID, time())
++            self.dbusInterface.GrabMediaPlayerKeys(APP_UID, time(), signature="su")
+             self.dbusInterface.connect_to_signal('MediaPlayerKeyPressed', self.onMediaKey)
+         except:
+             # If it didn't work, try the old way
+             try:
+-                service = dbus.SessionBus().get_object('org.gnome.SettingsDaemon', '/org/gnome/SettingsDaemon')
++                service = dbus.SessionBus().get_object('org.gnome.SettingsDaemon', '/org/gnome/SettingsDaemon', introspect=False)
+                 self.dbusInterface = dbus.Interface(service, 'org.gnome.SettingsDaemon')
+-                self.dbusInterface.GrabMediaPlayerKeys(APP_UID, time())
++                self.dbusInterface.GrabMediaPlayerKeys(APP_UID, time(), signature="su")
+                 self.dbusInterface.connect_to_signal('MediaPlayerKeyPressed', self.onMediaKey)
+             except Exception as err:
+                 log.logger.error('[%s] Error while initializing: %s' % (MOD_INFO[modules.MODINFO_NAME], err))
+@@ -76,4 +77,4 @@ class GnomeMediaKeys(modules.Module):
+     def onAppQuit(self):
+         """ The application is about to terminate """
+         if self.dbusInterface is not None:
+-            self.dbusInterface.ReleaseMediaPlayerKeys(APP_UID)
++            self.dbusInterface.ReleaseMediaPlayerKeys(APP_UID, signature="s")
+diff --git a/pogo/tools/__init__.py b/pogo/tools/__init__.py
+index 79cf6da..efe0409 100644
+--- a/pogo/tools/__init__.py
++++ b/pogo/tools/__init__.py
+@@ -51,7 +51,10 @@ def listDir(directory, listHiddenFiles=False):
+     if mTime != cachedMTime:
+         # Make sure it's readable
+         if os.access(directory, os.R_OK | os.X_OK):
+-            list = sorted(os.listdir(directory), key=lambda file: file.lower())
++            try:
++                list = sorted(os.listdir(directory), key=lambda file: file.lower())
++            except:
++                list = []
+         else:
+             list = []
+ 
