@@ -36,7 +36,7 @@ parts:
     override-pull: |
       snapcraftctl pull
       snapcraftctl set-version "$(git describe --tags)"
-      git apply /root/project/snap.patch
+      git apply $SNAPCRAFT_STAGE/snap.patch
     override-build: |
       prefix=$SNAPCRAFT_PART_INSTALL make install
       sed -i 's/^prefix = .*/import os\nprefix = os.environ.get("SNAP")/g' $SNAPCRAFT_PART_INSTALL/bin/pogo
@@ -56,6 +56,14 @@ parts:
     override-prime: |
       snapcraftctl prime
       sed -i 's/Icon=pogo/Icon=${SNAP}\/share\/pogo\/pix\/pogo-192.png/g' share/applications/pogo.desktop
+    after:
+       - patches
+       
+patches:
+    source: snap/patches
+    plugin: dump
+    prime:
+      - -*
 
 apps:
   pogo:
