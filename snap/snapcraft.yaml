@@ -43,21 +43,13 @@ parts:
     build-packages:
       - gettext
     stage-packages:
-      - gir1.2-gdkpixbuf-2.0
-      - gir1.2-glib-2.0
       - gir1.2-gstreamer-1.0
-      - gir1.2-gtk-3.0
-      - gir1.2-pango-1.0
       - gir1.2-notify-0.7
       - gstreamer1.0-plugins-base
       - gstreamer1.0-plugins-good
       - gstreamer1.0-pulseaudio
-      - python3-gi
-      - python3-dbus
       - python3-mutagen
       - python3-pil
-      - libgl1
-      - libglu1-mesa
       - freeglut3
       - libgpm2
       - libslang2
