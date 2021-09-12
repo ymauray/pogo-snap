@@ -16,7 +16,7 @@ description: |
 grade: stable
 confinement: strict
 architectures:
-  - build-on: amd-64
+  - build-on: amd64
 compression: lzo
 
 slots:
