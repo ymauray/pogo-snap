@@ -59,7 +59,7 @@ parts:
     after:
        - patches
        
-patches:
+  patches:
     source: snap/patches
     plugin: dump
     prime:
