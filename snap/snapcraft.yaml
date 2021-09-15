@@ -43,16 +43,17 @@ parts:
     build-packages:
       - gettext
     stage-packages:
+      - freeglut3
       - gir1.2-gstreamer-1.0
       - gir1.2-notify-0.7
       - gstreamer1.0-plugins-base
       - gstreamer1.0-plugins-good
       - gstreamer1.0-pulseaudio
-      - python3-mutagen
-      - python3-pil
-      - freeglut3
+      - libglu1-mesa
       - libgpm2
       - libslang2
+      - python3-mutagen
+      - python3-pil
     override-prime: |
       snapcraftctl prime
       sed -i 's/Icon=pogo/Icon=${SNAP}\/share\/pogo\/pix\/pogo-192.png/g' share/applications/pogo.desktop
@@ -60,7 +61,7 @@ parts:
        - patches
        
   patches:
-    source: snap/patches
+    source: snap/local/patches
     plugin: dump
     prime:
       - -*
