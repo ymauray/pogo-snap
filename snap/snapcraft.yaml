@@ -16,7 +16,7 @@ description: |
 grade: stable
 confinement: strict
 architectures:
-  - build-on: amd-64
+  - build-on: amd64
 compression: lzo
 
 slots:
@@ -36,34 +36,46 @@ parts:
     override-pull: |
       snapcraftctl pull
       snapcraftctl set-version "$(git describe --tags)"
-      git apply /root/project/snap.patch
+      git apply $SNAPCRAFT_STAGE/snap.patch
     override-build: |
       prefix=$SNAPCRAFT_PART_INSTALL make install
       sed -i 's/^prefix = .*/import os\nprefix = os.environ.get("SNAP")/g' $SNAPCRAFT_PART_INSTALL/bin/pogo
     build-packages:
       - gettext
     stage-packages:
-      - gir1.2-gdkpixbuf-2.0
-      - gir1.2-glib-2.0
       - gir1.2-gstreamer-1.0
-      - gir1.2-gtk-3.0
-      - gir1.2-pango-1.0
       - gir1.2-notify-0.7
       - gstreamer1.0-plugins-base
       - gstreamer1.0-plugins-good
       - gstreamer1.0-pulseaudio
-      - python3-gi
-      - python3-dbus
       - python3-mutagen
       - python3-pil
-      - libgl1
-      - libglu1-mesa
       - freeglut3
       - libgpm2
       - libslang2
     override-prime: |
       snapcraftctl prime
       sed -i 's/Icon=pogo/Icon=${SNAP}\/share\/pogo\/pix\/pogo-192.png/g' share/applications/pogo.desktop
+    after:
+       - patches
+       
+  patches:
+    source: snap/patches
+    plugin: dump
+    prime:
+      - -*
+      
+  cleanup:
+    after:
+      - pogo
+    plugin: nil
+    override-prime: |
+      set -eux
+      for CRUFT in bug lintian man; do
+        rm -rf $SNAPCRAFT_PRIME/usr/share/$CRUFT
+      done
+      find $SNAPCRAFT_PRIME/usr/share/doc/ -type f -not -name 'copyright' -delete
+      find $SNAPCRAFT_PRIME/usr/share -type d -empty -delete
 
 apps:
   pogo:
